@@ -58,13 +58,26 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
     }
   }
 
-  Future<void> _exportPdf() async {
+  Future<void> _sharePdf() async {
     if (_receipt == null) return;
     try {
-      await PdfReceiptService.export(_receipt!);
+      await PdfReceiptService.sharePdf(_receipt!);
+    } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(AppLang.tr('exportSuccess'))));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${AppLang.tr('exportFail')}: $e')));
+    }
+  }
+
+  Future<void> _savePdf() async {
+    if (_receipt == null) return;
+    try {
+      final savedToDownloads = await PdfReceiptService.savePdf(_receipt!);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(savedToDownloads
+              ? AppLang.tr('savedToDownloads')
+              : AppLang.tr('exportSuccess'))));
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -78,10 +91,38 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
       appBar: AppBar(
         title: Text(AppLang.tr('receiptDetails')),
         actions: [
-          IconButton(
-            onPressed: _receipt == null ? null : _exportPdf,
-            icon: const Icon(Icons.picture_as_pdf_outlined),
+          PopupMenuButton<String>(
+            enabled: _receipt != null,
             tooltip: AppLang.tr('exportPdf'),
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            onSelected: (value) {
+              switch (value) {
+                case 'save':
+                  _savePdf();
+                case 'share':
+                  _sharePdf();
+              }
+            },
+            itemBuilder: (ctx) => [
+              PopupMenuItem(
+                value: 'save',
+                child: ListTile(
+                  leading: const Icon(Icons.save_alt_outlined),
+                  title: Text(AppLang.tr('saveReceipt')),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              PopupMenuItem(
+                value: 'share',
+                child: ListTile(
+                  leading: const Icon(Icons.share_outlined),
+                  title: Text(AppLang.tr('shareReceipt')),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+            ],
           ),
         ],
       ),

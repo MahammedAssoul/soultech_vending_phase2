@@ -227,6 +227,8 @@ class L {
   static const exportSuccess = 'exportSuccess';
   static const exportFail = 'exportFail';
   static const savedToDownloads = 'savedToDownloads';
+  static const saveReceipt = 'saveReceipt';
+  static const shareReceipt = 'shareReceipt';
 
   // Settings / language
   static const language = 'language';
@@ -509,6 +511,8 @@ class AppStrings {
     'exportSuccess': 'Export completed',
     'exportFail': 'Export failed',
     'savedToDownloads': 'Saved to Downloads',
+    'saveReceipt': 'Save Receipt',
+    'shareReceipt': 'Share Receipt',
 
     // Settings / language
     'language': 'Language',
@@ -795,6 +799,8 @@ class AppStrings {
     'exportSuccess': 'اكتمل التصدير',
     'exportFail': 'فشل التصدير',
     'savedToDownloads': 'تم الحفظ في التنزيلات',
+    'saveReceipt': 'حفظ الإيصال',
+    'shareReceipt': 'مشاركة الإيصال',
 
     // Settings / language
     'language': 'اللغة',

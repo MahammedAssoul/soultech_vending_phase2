@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:soultech_vending/core/localization/app_strings.dart';
 import 'package:soultech_vending/core/theme/app_theme.dart';
 import 'package:soultech_vending/core/theme/theme_controller.dart';
@@ -10,6 +11,8 @@ import 'package:soultech_vending/data/repositories/machine_repository.dart';
 import 'package:soultech_vending/data/repositories/product_repository.dart';
 import 'package:soultech_vending/data/repositories/sale_repository.dart';
 import 'package:soultech_vending/data/repositories/spending_repository.dart';
+import 'package:soultech_vending/features/dashboard/commission_details_page.dart';
+import 'package:soultech_vending/features/dashboard/profit_details_page.dart';
 import 'package:soultech_vending/features/machines/machines_page.dart';
 import 'package:soultech_vending/features/receipts/sales_receipt_page.dart';
 import 'package:soultech_vending/features/records/cash_collection_form_page.dart';
@@ -56,6 +59,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
   // Top machines
   List<Map<String, Object?>> _topMachines = [];
+
+  /// Current month name, e.g. 'June'.
+  String get _monthName => DateFormat('MMMM')
+      .format(DateTime(DateTime.now().year, DateTime.now().month));
 
   final _saleRepo = SaleRepository();
   final _collectionRepo = CashCollectionRepository();
@@ -223,40 +230,68 @@ class _DashboardPageState extends State<DashboardPage> {
                                 //   color: AppColors.blue,
                                 // ),
                                 _StatCard(
+                                  title:
+                                      '$_monthName ${AppLang.tr('collected')}',
+                                  value: Fmt.money(_monthCollected),
+                                  icon: Icons.payments_outlined,
+                                  color: Colors.indigo,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const SalesReceiptPage())),
+                                ),
+                                _StatCard(
                                   title: AppLang.tr('totalMachines'),
                                   subTitle:
                                       '$_activeMachines ${AppLang.tr('active')}',
                                   value: '$_totalMachines',
                                   icon: Icons.local_shipping_outlined,
                                   color: AppColors.navy,
+                                  alignment: Alignment.centerRight,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const MachinesPage())),
                                 ),
                                 _StatCard(
-                                  title: AppLang.tr('thisMonthCommission'),
+                                  title:
+                                      '$_monthName ${AppLang.tr('commission')}',
                                   value: Fmt.money(_monthCommission),
                                   icon: Icons.percent,
                                   color: AppColors.lightBlue,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const CommissionDetailsPage())),
                                 ),
+
                                 _StatCard(
                                   title:
-                                      '${AppLang.tr('thisMonth')} ${AppLang.tr('profit')}',
-                                  value: Fmt.money(
-                                      _monthCollected - _monthTotalSpending),
-                                  icon: Icons.trending_up,
-                                  color: Colors.green,
-                                ),
-                                _StatCard(
-                                  title:
-                                      '${AppLang.tr('thisMonth')} ${AppLang.tr('collected')}',
-                                  value: Fmt.money(_monthCollected),
-                                  icon: Icons.payments_outlined,
-                                  color: Colors.indigo,
-                                ),
-                                _StatCard(
-                                  title:
-                                      '${AppLang.tr('thisMonth')} ${AppLang.tr('spending')}',
+                                      '$_monthName ${AppLang.tr('spending')}',
                                   value: Fmt.money(_monthTotalSpending),
                                   icon: Icons.payments_outlined,
                                   color: Colors.red,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const SpendingRecordsPage())),
+                                ),
+                                _StatCard(
+                                  title: '$_monthName ${AppLang.tr('profit')}',
+                                  value: Fmt.money(_monthCollected -
+                                      _monthTotalSpending -
+                                      _monthCommission),
+                                  icon: Icons.trending_up,
+                                  color: Colors.green,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const ProfitDetailsPage())),
                                 ),
                               ],
                             ),

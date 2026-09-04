@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:soultech_vending/core/localization/app_strings.dart';
 import 'package:soultech_vending/core/utils/format.dart';
 import 'package:soultech_vending/features/receipts/sales_receipt_service.dart';
@@ -156,13 +159,48 @@ class PdfReceiptService {
     return doc.save();
   }
 
+  /// Generates the file name used for the receipt PDF:
+  /// "{Month}-Sales-Receipt-{Machine Name}.pdf".
+  static String fileName(SalesReceipt receipt) {
+    final monthName = DateFormat('MMMM', 'en').format(receipt.month);
+    final machineName = _safeFilename(receipt.machine.name);
+    return '$monthName-Sales-Receipt-$machineName.pdf';
+  }
+
+  /// Prints / saves the PDF via the system print dialog.
   static Future<void> export(SalesReceipt receipt) async {
     final bytes = await build(receipt);
-    final year = receipt.month.year;
-    final mm = receipt.month.month.toString().padLeft(2, '0');
     await Printing.layoutPdf(
       onLayout: (_) async => bytes,
-      name: 'soultech_receipt_${receipt.machine.code}_${year}_$mm.pdf',
+      name: fileName(receipt),
     );
+  }
+
+  /// Saves the PDF to the app documents directory and opens the share sheet.
+  static Future<void> sharePdf(SalesReceipt receipt) async {
+    final bytes = await build(receipt);
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${fileName(receipt)}');
+    await file.writeAsBytes(bytes);
+    await Share.shareXFiles(
+      [XFile(file.path, mimeType: 'application/pdf')],
+    );
+  }
+
+  /// Saves the PDF directly to the device Downloads folder when available.
+  static Future<bool> savePdf(SalesReceipt receipt) async {
+    final bytes = await build(receipt);
+    final downloads = await getDownloadsDirectory();
+    final dir = downloads ??
+        await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${fileName(receipt)}');
+    await file.writeAsBytes(bytes);
+    return downloads != null;
+  }
+
+  /// Replaces characters that are invalid in file names and trims whitespace.
+  static String _safeFilename(String value) {
+    final safe = value.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_').trim();
+    return safe.isEmpty ? 'Machine' : safe;
   }
 }

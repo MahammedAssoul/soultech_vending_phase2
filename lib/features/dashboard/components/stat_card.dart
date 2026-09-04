@@ -1,17 +1,20 @@
 part of '../dashboard_page.dart';
 
 class _StatCard extends StatelessWidget {
-  const _StatCard(
-      {required this.title,
-      required this.value,
-      required this.icon,
-      required this.color,
-      this.subTitle = '',
-      this.onTap});
+  const _StatCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+    this.subTitle = '',
+    this.onTap,
+    this.alignment = Alignment.centerRight,
+  });
   final String title, value, subTitle;
   final IconData icon;
   final Color color;
   final VoidCallback? onTap;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) => Card(
@@ -33,10 +36,13 @@ class _StatCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: color, size: 20),
                   ),
-                  const Spacer(),
-                  Text(value,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w800)),
+                  const SizedBox(width: 5),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(value,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w800)),
+                  ),
                 ]),
                 const SizedBox(height: 10),
                 Text(title,

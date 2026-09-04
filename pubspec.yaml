@@ -25,6 +25,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
+  archive: ^3.6.1
 
 dev_dependencies:
   flutter_test:

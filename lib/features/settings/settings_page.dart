@@ -41,11 +41,24 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _restoreBackup() async {
-    final file = await openFile(
-      acceptedTypeGroups: const [
-        XTypeGroup(label: 'JSON', extensions: ['json']),
-      ],
-    );
+    XFile? file;
+    try {
+      file = await openFile(
+        acceptedTypeGroups: const [
+          XTypeGroup(
+            label: 'ZIP',
+            extensions: ['zip'],
+            mimeTypes: ['application/zip'],
+            uniformTypeIdentifiers: ['public.zip-archive'],
+          ),
+        ],
+      );
+    } catch (_) {
+      // Some platforms (e.g. iOS) reject filters without UTIs, and some
+      // Android devices don't map the "zip" extension to a MIME type.
+      // Fall back to allowing any file; restoreBackup validates the zip.
+      file = await openFile();
+    }
     if (file == null) return;
     if (!mounted) return;
     final confirmed = await showDialog<bool>(
