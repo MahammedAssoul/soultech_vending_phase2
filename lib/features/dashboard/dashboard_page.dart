@@ -5,6 +5,7 @@ import 'package:soultech_vending/core/localization/app_strings.dart';
 import 'package:soultech_vending/core/theme/app_theme.dart';
 import 'package:soultech_vending/core/theme/theme_controller.dart';
 import 'package:soultech_vending/core/utils/format.dart';
+import 'package:soultech_vending/core/widgets/app_drawer.dart';
 import 'package:soultech_vending/core/widgets/soultech_logo.dart';
 import 'package:soultech_vending/data/repositories/cash_collection_repository.dart';
 import 'package:soultech_vending/data/repositories/machine_repository.dart';
@@ -160,7 +161,15 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(current: DrawerSection.home),
       appBar: AppBar(
+        leading: Builder(
+          builder: (context) => IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: const Icon(Icons.menu),
+            tooltip: AppLang.tr(L.appMenu),
+          ),
+        ),
         title: const SoultechLogo(width: 145),
         actions: [
           ListenableBuilder(

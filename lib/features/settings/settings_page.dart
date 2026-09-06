@@ -4,6 +4,8 @@ import 'package:soultech_vending/core/localization/app_strings.dart';
 import 'package:soultech_vending/core/services/backup_service.dart';
 import 'package:soultech_vending/core/services/csv_import_service.dart';
 import 'package:soultech_vending/core/theme/theme_controller.dart';
+import 'package:soultech_vending/core/utils/url_launcher.dart';
+import 'package:soultech_vending/features/support/support_web_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -153,6 +155,71 @@ class _SettingsPageState extends State<SettingsPage> {
         ]),
       );
 
+  /// Shows the two customer support options and performs the chosen action.
+  Future<void> _openCustomerSupport() async {
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Text(
+              AppLang.tr('customerSupport'),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            ListTile(
+              leading: const Icon(Icons.web, color: Colors.indigo),
+              title: Text(AppLang.tr('openInApp')),
+              subtitle: const Text(kSupportSiteUrl),
+              onTap: () => Navigator.pop(ctx, 'app'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.open_in_new, color: Colors.green),
+              title: Text(AppLang.tr('openExternal')),
+              subtitle: const Text(kSupportSiteUrl),
+              onTap: () => Navigator.pop(ctx, 'external'),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (choice == null || !mounted) return;
+
+    switch (choice) {
+      case 'app':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SupportWebPage()),
+        );
+        break;
+      case 'external':
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(AppLang.tr('openExternal')),
+            content: Text(AppLang.tr('openExternalConfirm')),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: Text(AppLang.tr('cancel'))),
+              FilledButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: Text(AppLang.tr('openExternal'))),
+            ],
+          ),
+        );
+        if (confirmed != true || !mounted) return;
+        final ok = await launchExternalUrl(kSupportSiteUrl);
+        if (!ok && mounted) {
+          _snack('${AppLang.tr('error')}: $kSupportSiteUrl');
+        }
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: Text(AppLang.tr('settings'))),
@@ -220,6 +287,17 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(AppLang.tr('restoreBackup')),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: _restoreBackup,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Customer support
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.support_agent),
+                      title: Text(AppLang.tr('customerSupport')),
+                      subtitle: const Text(kSupportSiteUrl),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: _openCustomerSupport,
                     ),
                   ),
                   const SizedBox(height: 24),

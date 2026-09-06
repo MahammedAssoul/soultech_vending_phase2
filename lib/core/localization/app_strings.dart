@@ -226,7 +226,6 @@ class L {
   static const restoreComplete = 'restoreComplete';
   static const exportSuccess = 'exportSuccess';
   static const exportFail = 'exportFail';
-  static const savedToDownloads = 'savedToDownloads';
   static const saveReceipt = 'saveReceipt';
   static const shareReceipt = 'shareReceipt';
 
@@ -247,6 +246,51 @@ class L {
   static const activeProducts = 'activeProducts';
   static const totalRestocked = 'totalRestocked';
   static const thisYearProfit = 'thisYearProfit';
+
+  // Customer support
+  static const customerSupport = 'customerSupport';
+  static const openInApp = 'openInApp';
+  static const openExternal = 'openExternal';
+  static const supportSiteTitle = 'supportSiteTitle';
+  static const openExternalConfirm = 'openExternalConfirm';
+
+  // QR Creator
+  static const qrCreator = 'qrCreator';
+  static const createQr = 'createQr';
+  static const dataType = 'dataType';
+  static const webUrl = 'webUrl';
+  static const websiteUrl = 'websiteUrl';
+  static const phoneNumber = 'phoneNumber';
+  static const text = 'text';
+  static const email = 'email';
+  static const emailAddress = 'emailAddress';
+  static const sms = 'sms';
+  static const subject = 'subject';
+  static const message = 'message';
+  static const qrPreview = 'qrPreview';
+  static const saveAsPng = 'saveAsPng';
+  static const saveAsPdf = 'saveAsPdf';
+  static const sharePng = 'sharePng';
+  static const sharePdf = 'sharePdf';
+  static const invalidUrl = 'invalidUrl';
+  static const invalidPhone = 'invalidPhone';
+  static const requiredField = 'requiredField';
+  static const qrCreated = 'qrCreated';
+  static const qrGenerateFail = 'qrGenerateFail';
+  static const exportPngFail = 'exportPngFail';
+  static const exportPdfFail = 'exportPdfFail';
+  static const shareFail = 'shareFail';
+  static const qrCode = 'qrCode';
+  static const content = 'content';
+  static const qrCreatorSubtitle = 'qrCreatorSubtitle';
+  static const qrPlaceholder = 'qrPlaceholder';
+  static const savedToDownloads = 'savedToDownloads';
+  static const savedFileName = 'savedFileName';
+
+  // Drawer
+  static const appMenu = 'appMenu';
+  static const home = 'home';
+  static const closeMenu = 'closeMenu';
 }
 
 class AppStrings {
@@ -537,6 +581,52 @@ class AppStrings {
     'theme': 'Theme',
     'darkMode': 'Dark Mode',
     'lightMode': 'Light Mode',
+
+    // Customer support
+    'customerSupport': 'Customer Support',
+    'openInApp': 'Open in App',
+    'openExternal': 'Open in Browser',
+    'supportSiteTitle': 'Customer Support',
+    'openExternalConfirm':
+        'This will open the support site in your default browser. Continue?',
+
+    // QR Creator
+    'qrCreator': 'QR Creator',
+    'createQr': 'Create QR',
+    'dataType': 'Data Type',
+    'webUrl': 'Web URL',
+    'websiteUrl': 'Website URL',
+    'phoneNumber': 'Phone Number',
+    'text': 'Text',
+    'email': 'Email',
+    'emailAddress': 'Email Address',
+    'sms': 'SMS',
+    'subject': 'Subject',
+    'message': 'Message',
+    'qrPreview': 'QR Preview',
+    'saveAsPng': 'Save as PNG',
+    'saveAsPdf': 'Save as PDF',
+    'sharePng': 'Share PNG',
+    'sharePdf': 'Share PDF',
+    'invalidUrl': 'Invalid URL',
+    'invalidPhone': 'Invalid phone number',
+    'requiredField': 'Required field',
+    'qrCreated': 'QR created successfully',
+    'qrGenerateFail': 'Failed to generate QR',
+    'exportPngFail': 'Failed to export PNG',
+    'exportPdfFail': 'Failed to export PDF',
+    'shareFail': 'Failed to share',
+    'qrCode': 'QR Code',
+    'content': 'Content',
+    'qrCreatorSubtitle':
+        'Create QR codes for URLs, phone numbers, text and other types of data.',
+    'qrPlaceholder': 'Your QR code will appear here',
+    'savedFileName': 'Saved as',
+
+    // Drawer
+    'appMenu': 'App Menu',
+    'home': 'Home',
+    'closeMenu': 'Close menu',
   };
 
   static const ar = {
@@ -825,5 +915,50 @@ class AppStrings {
     'theme': 'المظهر',
     'darkMode': 'الوضع الداكن',
     'lightMode': 'الوضع الفاتح',
+
+    // Customer support
+    'customerSupport': 'دعم العملاء',
+    'openInApp': 'فتح داخل التطبيق',
+    'openExternal': 'فتح في المتصفح',
+    'supportSiteTitle': 'دعم العملاء',
+    'openExternalConfirm': 'سيتم فتح موقع الدعم في متصفحك الافتراضي. متابعة؟',
+
+    // QR Creator
+    'qrCreator': 'منشئ رمز QR',
+    'createQr': 'إنشاء رمز QR',
+    'dataType': 'نوع البيانات',
+    'webUrl': 'رابط ويب',
+    'websiteUrl': 'رابط الموقع',
+    'phoneNumber': 'رقم الهاتف',
+    'text': 'نص',
+    'email': 'بريد إلكتروني',
+    'emailAddress': 'عنوان البريد الإلكتروني',
+    'sms': 'رسالة نصية',
+    'subject': 'الموضوع',
+    'message': 'الرسالة',
+    'qrPreview': 'معاينة رمز QR',
+    'saveAsPng': 'حفظ بصيغة PNG',
+    'saveAsPdf': 'حفظ بصيغة PDF',
+    'sharePng': 'مشاركة PNG',
+    'sharePdf': 'مشاركة PDF',
+    'invalidUrl': 'رابط غير صالح',
+    'invalidPhone': 'رقم هاتف غير صالح',
+    'requiredField': 'حقل مطلوب',
+    'qrCreated': 'تم إنشاء رمز QR بنجاح',
+    'qrGenerateFail': 'فشل إنشاء رمز QR',
+    'exportPngFail': 'فشل تصدير PNG',
+    'exportPdfFail': 'فشل تصدير PDF',
+    'shareFail': 'فشلت المشاركة',
+    'qrCode': 'رمز QR',
+    'content': 'المحتوى',
+    'qrCreatorSubtitle':
+        'أنشئ رموز QR لروابط الويب وأرقام الهاتف والنصوص وأنواع أخرى من البيانات.',
+    'qrPlaceholder': 'سيظهر رمز QR هنا',
+    'savedFileName': 'تم الحفظ باسم',
+
+    // Drawer
+    'appMenu': 'قائمة التطبيق',
+    'home': 'الرئيسية',
+    'closeMenu': 'إغلاق القائمة',
   };
 }
