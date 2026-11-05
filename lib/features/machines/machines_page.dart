@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:soultech_vending/core/localization/app_strings.dart';
 import 'package:soultech_vending/core/theme/app_theme.dart';
 import 'package:soultech_vending/data/models/machine.dart';
 import 'package:soultech_vending/data/repositories/machine_repository.dart';
@@ -32,6 +33,28 @@ class _MachinesPageState extends State<MachinesPage> {
     final changed = await Navigator.push<bool>(context,
         MaterialPageRoute(builder: (_) => MachineFormPage(machine: machine)));
     if (changed == true) _load();
+  }
+
+  Future<void> _delete(Machine machine) async {
+    if (machine.id == null) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(AppLang.tr('delete')),
+        content: Text(AppLang.tr('confirmDeleteMachine')),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(AppLang.tr('cancel'))),
+          FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(AppLang.tr('delete'))),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    await repo.delete(machine.id!);
+    _load();
   }
 
   @override
@@ -80,10 +103,7 @@ class _MachinesPageState extends State<MachinesPage> {
                                   trailing: PopupMenuButton<String>(
                                       onSelected: (v) async {
                                         if (v == 'edit') _edit(m);
-                                        if (v == 'delete' && m.id != null) {
-                                          await repo.delete(m.id!);
-                                          _load();
-                                        }
+                                        if (v == 'delete') _delete(m);
                                       },
                                       itemBuilder: (_) => const [
                                             PopupMenuItem(
